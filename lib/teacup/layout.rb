@@ -164,7 +164,8 @@ module Teacup
       # assign the 'teacup_next_responder', which is queried for a stylesheet if
       # one is not explicitly assigned to the view
       if view.is_a? Layout
-        view.teacup_next_responder = self
+        view.teacup_next_responder = WeakRef.new(self)
+        # view.teacup_next_responder = self
       end
 
       if block_given?
@@ -255,7 +256,8 @@ module Teacup
     def auto(layout_view=top_level_view, layout_subviews={}, &layout_block)
       raise "gem install 'motion-layout'" unless defined? Motion::Layout
 
-      Teacup.get_styled_subviews(top_level_view).each do |view|
+      styled_subviews = layout_view.subviews.select { |v| v.stylename }
+      styled_subviews.each do |view|
         if ! layout_subviews[view.stylename.to_s]
           layout_subviews[view.stylename.to_s] = view
         end

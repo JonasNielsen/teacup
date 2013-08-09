@@ -18,7 +18,35 @@ describe "Teacup::View" do
     @stylesheet = Teacup::Stylesheet.new do
       style :label,
         text: "Stylesheet1 Label1"
+
+      style :new_style,
+        text: 'new style'
+
+      style :constrained,
+        constraints: [
+          [:full]
+        ]
+
     end
+  end
+
+  describe 'reset_constraints' do
+
+    before do
+      @outer = UIView.new
+      @outer.addSubview @view
+    end
+
+    it "forgets the list of constraints that may have been set" do
+      @view.stylesheet = @stylesheet
+      @view.add_style_class :constrained
+      @view.apply_constraints
+      @view.constraints.should.not.be.empty
+      @outer.reset_constraints
+      @view.apply_constraints
+      @view.constraints.should.be.empty
+    end
+
   end
 
   describe 'stylename=' do
@@ -41,6 +69,14 @@ describe "Teacup::View" do
       @view.stylesheet = @stylesheet
       @view.apply_stylename(:label)
       @view.text.should == "Stylesheet1 Label1"
+    end
+  end
+
+  describe 'add_style_class' do
+    it "should add the new style to the view" do
+      @view.stylesheet = @stylesheet
+      @view.add_style_class :new_style
+      @view.text.should == "new style"
     end
   end
 

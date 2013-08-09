@@ -63,7 +63,7 @@ module Teacup
     end
 
     def add_style_class(stylename)
-      unless style_classes.include?
+      unless style_classes.include? stylename
         style_classes << stylename
         restyle!
       end
@@ -306,6 +306,13 @@ module Teacup
 
     def apply_style_properties(properties)
       Teacup.apply_hash self, properties
+    end
+
+    def reset_constraints
+      @teacup_constraints = nil
+      subviews.each do |subview|
+        subview.reset_constraints
+      end
     end
 
     def add_uniq_constraints(constraint)

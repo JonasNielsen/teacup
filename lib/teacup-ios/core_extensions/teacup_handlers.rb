@@ -8,6 +8,11 @@ end
 ##|
 ##|  UIView.frame
 ##|
+Teacup.handler UIView, :sizeToFit do |target, truthy|
+  target.sizeToFit if truthy
+end
+
+
 Teacup.handler UIView, :left, :x do |target, x|
   f = target.frame
   f.origin.x = Teacup::calculate(target, :width, x)
@@ -141,7 +146,11 @@ end
 ##|  UIButton
 ##|
 Teacup.handler UIButton, :title do |target, title|
-  target.setTitle(title, forState: UIControlStateNormal)
+  if title.is_a?(NSAttributedString)
+    target.setAttributedTitle(title, forState: UIControlStateNormal)
+  else
+    target.setTitle(title.to_s, forState: UIControlStateNormal)
+  end
 end
 
 

@@ -1,1 +1,2 @@
-gem 'teacup', :path => '../../..'
+gem 'rake'
+gem 'teacup', :git => 'git@github.com:JonasNielsen/teacup.git'
